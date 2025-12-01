@@ -1,37 +1,24 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import auth from "./routes/auth.js";
-
-dotenv.config();
+// server.js
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:5173",
-  "https://luxury-tdm.vercel.app", // dominio de tu frontend
-];
+// Middleware
+app.use(cors());           // Permite que tu frontend acceda al backend
+app.use(express.json());   // Para poder recibir JSON en requests
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-  })
-);
-
-app.use(express.json());
-app.use("/auth", auth);
-
-app.get("/", (req, res) => {
-  res.send("API Cars Luxury funcionando 🚀");
+// Rutas de ejemplo
+app.get('/', (req, res) => {
+  res.send('Servidor backend funcionando correctamente ✅');
 });
 
+// Aquí podrías agregar tus rutas reales, por ejemplo:
+// const treatmentRoutes = require('./routes/treatments');
+// app.use('/api/treatments', treatmentRoutes);
+
+// Puerto dinámico para Vercel
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
