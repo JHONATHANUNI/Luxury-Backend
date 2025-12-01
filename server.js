@@ -17,8 +17,8 @@ app.get("/", (req, res) => {
 });
 
 // Aquí agregas tus rutas reales
-// import authRoutes from "./routes/auth.js";
-// app.use("/auth", authRoutes);
+import authRoutes from "./routes/auth.js";
+app.use("/auth", authRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
