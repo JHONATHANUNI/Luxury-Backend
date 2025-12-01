@@ -3,14 +3,14 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-// ÚNICO USUARIO FIJO PARA TODOS
+// Usuario fijo
 const FIXED_USER = {
   id: 1,
   email: "admin@test.com",
-  password: "1234", // puedes cambiarla si quieres
+  password: "1234", // contraseña plana
 };
 
-// LOGIN (solo usuario fijo)
+// LOGIN
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -24,7 +24,7 @@ router.post("/login", (req, res) => {
 
   const token = jwt.sign(
     { id: FIXED_USER.id, email: FIXED_USER.email },
-    process.env.JWT_SECRET || "secretKey123",
+    process.env.SECRET_KEY || "miClaveSecreta",
     { expiresIn: "4h" }
   );
 
