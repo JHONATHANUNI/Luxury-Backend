@@ -1,29 +1,20 @@
-// routes/auth.js
 import express from "express";
 import jwt from "jsonwebtoken";
-import fs from "fs";
-import path from "path";
 
 const router = express.Router();
-const __dirname = path.resolve();
 
-const USERS_PATH = path.join(__dirname, "data", "users.json");
-
-// Leer base de datos
-function readUsers() {
-  const data = fs.readFileSync(USERS_PATH, "utf8");
-  return JSON.parse(data);
-}
-
-// Guardar base de datos
-function saveUsers(users) {
-  fs.writeFileSync(USERS_PATH, JSON.stringify(users, null, 2));
-}
+// "Base de datos" en memoria temporal
+let users = [
+  {
+    id: 1,
+    email: "admin@test.com",
+    password: "1234",
+  },
+];
 
 // REGISTER (demo sin encriptar)
 router.post("/register", (req, res) => {
   const { email, password } = req.body;
-  const users = readUsers();
 
   if (users.find((u) => u.email === email)) {
     return res.status(400).json({ msg: "El usuario ya existe" });
@@ -32,11 +23,10 @@ router.post("/register", (req, res) => {
   const newUser = {
     id: Date.now(),
     email,
-    password, // solo para pruebas; en producción debería ir encriptada
+    password, // solo para pruebas
   };
 
   users.push(newUser);
-  saveUsers(users);
 
   res.json({ msg: "Usuario registrado correctamente" });
 });
@@ -44,7 +34,6 @@ router.post("/register", (req, res) => {
 // LOGIN (demo sin encriptar)
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
-  const users = readUsers();
 
   const user = users.find((u) => u.email === email);
 
